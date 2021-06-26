@@ -5,16 +5,18 @@ import java.util.Scanner;
 import sql.Sql;
 
 /**
- * 教材管理系统
+ * 教材管理系统主类
+ * 
  * @author 魔宇
  *
  */
 public class TextbookMIS{
+	//数据库
     Sql sql=new Sql();
-	TextbookOrder bookOrder=new TextbookOrder();
-	SellRecord sellRecord=new SellRecord();
-	TextCount textCount=new TextCount();
-	LibraryManager library=new LibraryManager();
+    TextbookOrder bookOrder;
+	SellRecord sellRecord;
+	TextCount textCount;
+	LibraryManager library;
 	public static void main(String[] args) {
 		System.out.println("=============================================欢迎来到教材管理系统=================================================");
 		//系统导航导航
@@ -52,7 +54,7 @@ public class TextbookMIS{
 	}
 	//教材订购
 	public void order() {
-//		TextbookOrder bookOrder=new TextbookOrder();
+		bookOrder=new TextbookOrder();
 		bookOrder.sqlConnection(sql);
 		System.out.println();
 		System.out.println("                                                  "+"=教材订购=");
@@ -78,8 +80,9 @@ public class TextbookMIS{
 			break;
 		}
 	}
+	//教材销售
 	public void sell(){
-//		SellRecord sellRecord=new SellRecord();
+		sellRecord=new SellRecord();
 		sellRecord.sqlConnection(sql);
 		System.out.println();
 		System.out.println("                                                  "+"=教材出售=");
@@ -105,8 +108,9 @@ public class TextbookMIS{
 			break;
 		}
 	}
+	//教材统计
 	public void count() {
-//		TextCount textCount=new TextCount();
+		textCount=new TextCount();
 		textCount.sqlConnection(sql);
 		System.out.println();
 		System.out.println("                                                  "+"=教材统计=");
@@ -131,8 +135,9 @@ public class TextbookMIS{
 			break;
 		}
 	}
+	//库存管理功能
 	public void library() {
-//		LibraryManager library=new LibraryManager();
+		library=new LibraryManager();
 		library.sqlConnection(sql);
 		System.out.println();
 		System.out.println("                                                  "+"=库存管理=");

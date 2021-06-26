@@ -50,6 +50,7 @@ public class Sql {
 	public void setSellMessage(HashMap<String, SellMessage> sellMessage) {
 		this.sellMessage = sellMessage;
 	}
+	//初始化两个书库
 	public void init() {
 		for(int i=1;i<=100;i++) {
 			Textbook textbook=new Textbook();
