@@ -4,16 +4,23 @@ import java.util.ArrayList;
 
 /**
  * 成绩单
- * @author 魔宇
+ * 
+ * @author 
  *
  */
 
 public class Report implements Comparable<Report>{
-	String name;
-	String number;
-	ArrayList<Course> courseScore;
-	String sum;
-	String remark;
+	//姓名
+	private String name;
+	//学号
+	private String number;
+	//考试所有科目存放在数组链表中
+	private ArrayList<Course> courseScore;
+	//总分
+	private String sum;
+	//备注
+	private String remark;
+	
 	public String getName() {
 		return name;
 	}
@@ -44,6 +51,9 @@ public class Report implements Comparable<Report>{
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+	/**
+	 * 以总分排名
+	 */
 	@Override
 	public int compareTo(Report o) {
 		int i=(int)(Double.parseDouble(sum)-Double.parseDouble(o.getSum()));

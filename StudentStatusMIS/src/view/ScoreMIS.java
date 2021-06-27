@@ -2,9 +2,9 @@ package view;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 import dao.Course;
 import dao.Report;
@@ -24,7 +24,7 @@ public class ScoreMIS implements SqlConnection{
 	//成绩单
 	Report report;
 	//全部学生成绩表
-	TreeMap<String,Report> studentReport;
+	HashMap<String,Report> studentReport;
 	public void enteringReport() {
 		Scanner scanner=new Scanner(System.in);
 		report=new Report();
