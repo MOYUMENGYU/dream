@@ -18,6 +18,7 @@ import sql.SqlConnection;
  */
 
 public class ScoreMIS implements SqlConnection{
+	//模拟数据库
 	Sql sql;
 	//课程
 	Course course;
@@ -25,10 +26,54 @@ public class ScoreMIS implements SqlConnection{
 	Report report;
 	//全部学生成绩表
 	HashMap<String,Report> studentReport;
-	public void enteringReport() {
+	
+	//成绩管理导航
+	public void navigationScore() {
+		System.out.println();
+		System.out.printf("%25s1.成绩录入 2.成绩信息 3.成绩查询 4.成绩删除 5.返回导航\n","");
+		System.out.printf("%45s请输入服务序号:","");
 		Scanner scanner=new Scanner(System.in);
-		report=new Report();
+		//对输入序号进行验证，防止非法输入导致程序终止
+		String order="";
+		boolean flag=true;
+		while(flag) {
+			order=scanner.nextLine();
+			if(order.matches("[12345]")) {
+				flag=false;
+			}else {
+				System.out.printf("%40s请输入正确的服务学号(1-5):","");
+				flag=true;
+			}
+		}
+		switch(Integer.parseInt(order)) {
+		case 1:
+			enteringReport();
+			navigationScore();
+			break;
+		case 2:
+			showStudentReport();
+			navigationScore();
+			break;
+		case 3:
+			checkScore();
+			navigationScore();
+			break;
+		case 4:
+			removeReport();
+			navigationScore();
+			break;
+		case 5:
+			System.out.println();
+			break;
+		}
+	}
+	//成绩录入
+	public void enteringReport() {
+		System.out.println();
 		System.out.println("========================================录入学生成绩！==================================================================================");
+		Scanner scanner=new Scanner(System.in);
+		//成绩单，封装成绩信息
+		report=new Report();
 		System.out.print("姓名:");
 		String name=scanner.nextLine();
 		report.setName(name);
@@ -39,17 +84,17 @@ public class ScoreMIS implements SqlConnection{
 		while(ff) {
 			number=scanner.nextLine();
 			if(checkData(number)) {
-				course.setScore(number);
+				report.setNumber(number);
 				ff=false;
 			}else {
-				System.out.print("请正确输入分数:");
+				System.out.print("请正确输入学号:");
 				ff=true;
 			}
 		}
 		report.setNumber(number);
 		
+		//存放各个考试科目和分数
 		ArrayList<Course> courseScore=new ArrayList<>();
-		
 		String math="高等数学";
 		course=new Course();
 		course.setCourse(math);
@@ -156,10 +201,12 @@ public class ScoreMIS implements SqlConnection{
 				System.out.print("请正确输入分数:");
 				f6=true;
 			}
-		}
-		
+		}	
 		report.setCourseScore(courseScore);
-		
+		/**
+		 * 为防止非法输入导致程序运行停止，故将变量都设为字符型
+		 * ，这里再将变量转换为数值型
+		 */
 		double sum=Double.parseDouble(score1)+Double.parseDouble(score2)
 				   +Double.parseDouble(score3)+Double.parseDouble(score4)
 				   +Double.parseDouble(score5)+Double.parseDouble(score6);
@@ -172,10 +219,14 @@ public class ScoreMIS implements SqlConnection{
 		//存放到数据库
 		sql.getStudentReport().put(number, report);
 		System.out.println("========================================录入完成！===========================================================================================================");
+		System.out.println();
 	}
+	//显示学生成绩信息
 	public void showStudentReport() {
-		System.out.println("========================================成绩信息！========================================================================================================");
+		System.out.println();
+		System.out.println("========================================成绩信息！==================================================================================================================================");
 		studentReport=sql.getStudentReport();
+		//存放成绩单，在数组链表里将成绩单排好序
 		ArrayList<Report> sortReport=new ArrayList<>();
 		if(!studentReport.isEmpty()) {
 			Iterator<String> iterator=studentReport.keySet().iterator();
@@ -183,11 +234,15 @@ public class ScoreMIS implements SqlConnection{
 				String number=iterator.next();
 				sortReport.add(studentReport.get(number));
 			}
+			//成绩单排序
 			Collections.sort(sortReport);
 			Iterator<Report> ir=sortReport.iterator();
+			//科目总分
 			double sum1=0,sum2=0,sum3=0,sum4=0,sum5=0,sum6=0;
+			//及格人数
 			double pass1=0,pass2=0,pass3=0,pass4=0,pass5=0,pass6=0;
 			double i=0;
+			//显示成绩
 			while(ir.hasNext()) {
 				Report r=ir.next();
 			    i=Double.parseDouble(r.getCourseScore().get(0).getScore());
@@ -220,25 +275,27 @@ public class ScoreMIS implements SqlConnection{
 				if(i>=60) {
 					pass6++;
 				}
+				//打印成绩信息
 				showReport(r);
-				//Iterator的next()在一个循环中不能出现两次，会导致最后的游标指向空值
-//				System.out.printf("排名:%-2d\n",(sortReport.indexOf(ir.next())+1));	
 				System.out.printf("排名:%-2d\n",(sortReport.indexOf(r)+1));
 			}
 			int size=sortReport.size();
-			System.out.println("========================================成绩分析==================================================================================");
+			System.out.println("========================================成绩分析============================================================================================================");
 			System.out.printf("高等数学 平均成绩:%.2f 及格率%.2f%%\n",sum1/size,pass1/size*100);
 			System.out.printf("大学物理 平均成绩:%.2f 及格率%.2f%%\n",sum2/size,pass2/size*100);
 			System.out.printf("大学英语 平均成绩:%.2f 及格率%.2f%%\n",sum3/size,pass3/size*100);
 			System.out.printf("Java     平均成绩:%.2f 及格率%.2f%%\n",sum4/size,pass4/size*100);
 			System.out.printf("军事理论 平均成绩:%.2f 及格率%.2f%%\n",sum5/size,pass5/size*100);
 			System.out.printf("大学体育 平均成绩:%.2f 及格率%.2f%%\n",sum6/size,pass6/size*100);
-			System.out.println("==========================================================================================================================");
+			System.out.println("====================================================================================================================================================");
 		}else {
 			System.out.println("========================================成绩还没有录入！=================================================================================");
 		}
+		System.out.println();
 	}
+	
 	public void checkScore() {
+		System.out.println();
 		System.out.println("========================================成绩查询！==================================================================================");
 		studentReport=sql.getStudentReport();
 		System.out.print("请输入要查询学生的学号:");
@@ -246,15 +303,21 @@ public class ScoreMIS implements SqlConnection{
 		String order=scanner.nextLine();
 		if(!studentReport.isEmpty()) {
 			if(studentReport.containsKey(order)) {
+				System.out.println("========================================查询结果！==================================================================================");
 				showReport(studentReport.get(order));
+				System.out.println("============================================================================================================================================");
 			}else {
 				System.out.println("========================================未查找到该学生的成绩！==================================================================================");
 			}
 		}else {
 			System.out.println("========================================成绩未录入！==================================================================================");
 		}
+		System.out.println();
 	}
-	public void removeReport() {System.out.println("========================================删除成绩！==================================================================================");
+	//删除成绩单
+	public void removeReport() {
+		System.out.println();
+		System.out.println("========================================删除成绩！==================================================================================");
 		studentReport=sql.getStudentReport();
 		System.out.print("请输入要删除学生的学号:");
 		Scanner scanner=new Scanner(System.in);
@@ -269,7 +332,9 @@ public class ScoreMIS implements SqlConnection{
 		}else {
 			System.out.println("========================================成绩未录入！==================================================================================");
 		}
+		System.out.println();
 	}
+	//打印成绩单
 	public void showReport(Report report) {
 		
 		System.out.printf("姓名:%-2s\t",report.getName());
@@ -284,10 +349,12 @@ public class ScoreMIS implements SqlConnection{
 		System.out.printf("备注:%-2s\t",report.getRemark());
 
 	}
+	//连接数据库
 	@Override
 	public void SqlConnection(Sql sql) {		
 		this.sql=sql;
 	}
+	//对字符串进行检测，只接受数字
 	public boolean checkData(String score) {
 		if(score.matches("\\d+")) {
 			return true;

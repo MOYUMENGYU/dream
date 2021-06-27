@@ -14,12 +14,13 @@ import dao.Student;
  */
 
 public class Sql {
-	//学生学籍存储表
-	HashMap<String,Student> studentStatus=new HashMap<>();
-	//成绩储存表
-	HashMap<String,Report> studentReport=new HashMap<>();
+	//学生学籍存储表：学号->学生
+	HashMap<String,Student> studentStatus;
+	//成绩储存表：学号->成绩单
+	HashMap<String,Report> studentReport;
 	public Sql(){
-		
+		studentStatus=new HashMap<>();
+		studentReport=new HashMap<>();
 	}
 	public HashMap<String, Student> getStudentStatus() {
 		return studentStatus;

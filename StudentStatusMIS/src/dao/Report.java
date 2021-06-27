@@ -5,6 +5,8 @@ import java.util.ArrayList;
 /**
  * 成绩单
  * 
+ * 封装学生的成绩信息，继承Comparable接口
+ * 根据总分排名输出
  * @author 
  *
  */

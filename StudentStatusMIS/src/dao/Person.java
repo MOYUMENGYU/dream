@@ -1,18 +1,21 @@
 package dao;
 /**
- * 人类
- * @author 魔宇
+ * 人
+ * 
+ * 封装人共有的信息
+ * 
+ * @author 
  *
  */
-
 public class Person {
-		 String name;
-		 String sex;
-		 String birthday;
-		 String age;
-		 String idNumber;
-		 String address;
-		 String nation;
+	String name;
+	String sex;
+	String birthday;
+    String age;
+    String idNumber;
+	String address;
+	String nation;
+	
 	public String getName() {
 		return name;
 	}
@@ -55,5 +58,4 @@ public class Person {
 	public void setNation(String nation) {
 		this.nation = nation;
 	}
-	
 }
